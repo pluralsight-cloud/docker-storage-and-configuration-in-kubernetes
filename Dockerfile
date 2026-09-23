@@ -27,7 +27,10 @@ ENV DATA_DIR=/data \
     BACKUP_PREFIX=backup \
     POLL_SECONDS=5
 
-# Default to watching DATA_DIR; override with a directory argument to
-# watch/archive somewhere else without changing the env var, e.g.:
-#   docker run ... backup-tool:latest backup-tool watch /uploads
-CMD ["backup-tool", "watch"]
+# Idle by default - every archive should be the result of an explicit
+# `backup-tool run` via docker/kubectl exec, not a background poll loop.
+# `watch` still exists in the CLI if you want it (see backup_tool.py), but
+# nothing in this image or the lab defaults to using it - a background
+# process quietly archiving things makes it hard to tell whether YOUR
+# command did something or it just happened to run first.
+CMD ["sleep", "infinity"]
